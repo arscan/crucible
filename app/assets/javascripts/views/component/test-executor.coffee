@@ -9,6 +9,7 @@ class Crucible.TestExecutor
     suiteSelect: 'views/templates/servers/suite_select'
     suiteResult: 'views/templates/servers/suite_result'
     testResult: 'views/templates/servers/test_result'
+
   html:
     selectAllButton: '<i class="fa fa-check"></i>&nbsp;Deselect All Test Suites'
     deselectAllButton: '<i class="fa fa-check"></i>&nbsp;Select All Test Suites'
@@ -26,6 +27,8 @@ class Crucible.TestExecutor
     @element.find('.selectDeselectAll').click(@selectDeselectAll)
     @element.find('.expandCollapseAll').click(@expandCollapseAll)
     @element.find('.filter-by-executed a').click(@showAllSuites)
+    @element.find('.group-by-suite').click(@groupBySuite)
+    @element.find('.group-by-individual-test').click(@groupByIndividualTest)
 
   loadTests: =>
     $.getJSON("api/tests.json").success((data) => 
@@ -88,6 +91,18 @@ class Crucible.TestExecutor
   showAllSuites: =>
     @element.find('.filter-by-executed').collapse('hide')
     @element.find('.test-run-result').show()
+
+  groupBySuite: =>
+    @element.find('.group-by-suite').addClass('selected')
+    @element.find('.test-suites').removeClass('hide')
+    @element.find('.group-by-individual-test').removeClass('selected')
+    @element.find('.individual-test-results').addClass('hide')
+
+  groupByIndividualTest: =>
+    @element.find('.group-by-individual-test').addClass('selected')
+    @element.find('.individual-test-results').removeClass('hide')
+    @element.find('.group-by-suite').removeClass('selected')
+    @element.find('.test-suites').addClass('hide')
 
   showOnlyExecutedSuites: =>
     @element.find('.filter-by-executed').collapse('show')
