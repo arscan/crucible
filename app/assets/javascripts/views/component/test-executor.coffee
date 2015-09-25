@@ -32,6 +32,8 @@ class Crucible.TestExecutor
     @element.find('.filter-by-executed a').click(@showAllSuites)
     @filterBox = @element.find('.test-results-filter')
     @filterBox.on('keyup', @filter)
+    @element.find('.group-by-suite').click(@groupBySuite)
+    @element.find('.group-by-individual-test').click(@groupByIndividualTest)
 
   loadTests: =>
     $.getJSON("api/tests.json").success((data) =>
@@ -125,6 +127,18 @@ class Crucible.TestExecutor
       @testRunId = result.test_run.id
       @element.dequeue("executionQueue")
     )
+
+  groupBySuite: =>
+    @element.find('.group-by-suite').addClass('selected')
+    @element.find('.test-suites').removeClass('hide')
+    @element.find('.group-by-individual-test').removeClass('selected')
+    @element.find('.individual-test-results').addClass('hide')
+
+  groupByIndividualTest: =>
+    @element.find('.group-by-individual-test').addClass('selected')
+    @element.find('.individual-test-results').removeClass('hide')
+    @element.find('.group-by-suite').removeClass('selected')
+    @element.find('.test-suites').addClass('hide')
 
   regenerateSummary: =>
     $.post("/api/servers/#{@serverId}/generate_summary", {test_run_id: @testRunId}).success((result) =>
