@@ -5,10 +5,15 @@ $(window).on('load', ->
 class Crucible.TestExecutor
   suites: []
   suitesById: {}
+
+  individualTests: []
+  individualTestsById: {}
+
   templates:
     suiteSelect: 'views/templates/servers/suite_select'
     suiteResult: 'views/templates/servers/suite_result'
     testResult: 'views/templates/servers/test_result'
+    individualTestResult: 'views/templates/servers/individual_test_result'
   html:
     selectAllButton: '<i class="fa fa-check"></i>&nbsp;Deselect All Test Suites'
     deselectAllButton: '<i class="fa fa-check"></i>&nbsp;Select All Test Suites'
@@ -38,8 +43,10 @@ class Crucible.TestExecutor
   loadTests: =>
     $.getJSON("api/tests.json").success((data) =>
       @suites = data['tests']
+      @individualTests = $($.map(@suites, (e) -> e.methods))
       @renderSuites()
       @element.trigger('testsLoaded')
+      @renderIndividualTests()
     )
 
   renderSuites: =>
@@ -52,6 +59,13 @@ class Crucible.TestExecutor
       suiteElement.data('suite', suite)
       $(suite.methods).each (i, test) =>
         @addClickTestHandler(test, suiteElement)
+
+  renderIndividualTests: =>
+    testsElement = @element.find('.individual-test-results')
+    testsElement.empty()
+    $(@individualTests).each (i, test) =>
+      # @individualTestsById[test.id] = test
+      testsElement.append(HandlebarsTemplates[@templates.individualTestResult]({test: test}))
 
   selectDeselectAll: =>
     suiteElements = @element.find('.test-run-result :checkbox')
@@ -99,6 +113,7 @@ class Crucible.TestExecutor
     @element.dequeue("executionQueue")
 
   filter: =>
+    debugger
     filterValue = @filterBox.val().toLowerCase()
     elements = @element.find('.test-run-result')
     if (filterValue.length == 0)

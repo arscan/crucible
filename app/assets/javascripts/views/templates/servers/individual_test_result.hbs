@@ -1,0 +1,79 @@
+<div class="individual-test-result-panel" id="individualtest-{{test.id}}">
+  <div class="toggleable panel-heading">
+    <h4 class="panel-title">
+      <input type="checkbox" name="{{test.id}}">
+      <a class="collapsed" data-toggle="collapse" aria-expanded="false" data-target="#{{test.id}}_details"></a>
+      <label>{{test.description}}</label>
+    </h4>
+  </div>
+
+  <div id="{{test.id}}_details" class="panel-collapse collapse" aria-expanded="false">
+    <div class="row test-details">
+      <div class="col-md-12">
+        <p class="helper_text">{{test.key}}: {{test.description}}</p>
+        <div class="row">
+          <div class="col-md-5">
+            <span class="label_text">TEST METHOD: </span>
+          </div>
+          <div class="col-md-7">
+            <span class="helper_text">{{test.description}}<span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5">
+            <span class="label_text">LINKS: </span>
+          </div>
+          <div class="col-md-7">
+          {{#each test.links as |link| }}
+            <a class="helper_text">{{link}}</a>
+          {{/each}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5">
+            <span class="label_text">METHODS REQUIRED: </span>
+          </div>
+          <div class="col-md-7">
+          {{#each test.requires as |req|}}
+            {{#each req.methods as |method| }}
+              <p class="helper_text">{{method}}</p>
+            {{/each}}
+          {{/each}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5">
+            <span class="label_text">RESOURCE REQUIRED: </span>
+          </div>
+          <div class="col-md-7">
+            {{#each test.requires as |req|}}
+              <span class="helper_text">{{req.resource}}<span>
+            {{/each}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5">
+           <span class="label_text">METHODS VALIDATED: </span>
+          </div>
+          <div class="col-md-7">
+          {{#each test.validates as |val|}}
+            {{#each val.methods as |method| }}
+              <p class="helper_text">{{method}}</p>
+            {{/each}}
+          {{/each}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5">
+           <span class="label_text">RESOURCE VALIDATED: </span>
+          </div>
+          <div class="col-md-7">
+            {{#each test.validates as |val|}}
+              <span class="helper_text">{{val.resource}}<span>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
