@@ -64,7 +64,7 @@ class Crucible.TestExecutor
     testsElement = @element.find('.individual-test-results')
     testsElement.empty()
     $(@individualTests).each (i, test) =>
-      # @individualTestsById[test.id] = test
+      @individualTestsById[test.id] = test
       testsElement.append(HandlebarsTemplates[@templates.individualTestResult]({test: test}))
 
   selectDeselectAll: =>
