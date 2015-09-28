@@ -66,6 +66,9 @@ class Crucible.TestExecutor
     $(@individualTests).each (i, test) =>
       @individualTestsById[test.id] = test
       testsElement.append(HandlebarsTemplates[@templates.individualTestResult]({test: test}))
+      testElement = testsElement.find("#individualtest-#{test.id}")
+      testElement.data('test', test)
+
 
   selectDeselectAll: =>
     suiteElements = @element.find('.test-run-result :checkbox')
@@ -113,19 +116,27 @@ class Crucible.TestExecutor
     @element.dequeue("executionQueue")
 
   filter: =>
-    debugger
     filterValue = @filterBox.val().toLowerCase()
-    elements = @element.find('.test-run-result')
+    suiteElements = @element.find('.test-run-result')
+    individualElements = @element.find('.individual-test-run-result')
     if (filterValue.length == 0)
-      elements.show()
+      suiteElements.show()
+      individualElements.show()
       return
-    $(elements).each (i, suiteElement) =>
+    $(suiteElements).each (i, suiteElement) =>
       suiteElement = $(suiteElement)
       suite = suiteElement.data('suite')
       if (suite.name.toLowerCase()).indexOf(filterValue) < 0
         suiteElement.hide()
       else
         suiteElement.show()
+    $(individualElements).each (i, individualElement) =>
+      individualElement = $(individualElement)
+      test = individualElement.data('test')
+      if (test.description.toLowerCase()).indexOf(filterValue) < 0
+        individualElement.hide()
+      else
+        individualElement.show()
         
   showAllSuites: =>
     @element.find('.filter-by-executed').collapse('hide')
