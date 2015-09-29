@@ -43,7 +43,12 @@ class Crucible.TestExecutor
   loadTests: =>
     $.getJSON("api/tests.json").success((data) =>
       @suites = data['tests']
-      @individualTests = $($.map(@suites, (e) -> e.methods))
+      @individualTests = []
+      for suite in @suites
+      #  methods = suite.methods
+      #  for method in methods
+      #    if method.name.indexOf('.')
+        @individualTests = @individualTests.concat(suite.methods)
       @renderSuites()
       @element.trigger('testsLoaded')
       @renderIndividualTests()
